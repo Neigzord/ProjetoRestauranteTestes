@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cadastro</title>
+
+    <link rel="shortcut icon" href="img/Logo-Circular-Chapa-Quente.ico">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="boxzinho">
+
+        <img src="img/Ícone Glossy de Adicionar Usuário.png" alt="">
+
+        <h1>Cadastro</h1>
+
+        <p class="topo">
+            Crie sua conta para começar
+        </p>
+
+        <form id="formulario-cadastro">
+
+            <div class="nome">
+                <img src="img/Ícone_de_usuário_branco_brilhante-removebg-preview.png" alt="">
+
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    placeholder="Digite seu nome"
+                >
+            </div>
+
+            <p id="erronome"></p>
+
+            <div class="cpf">
+                <img src="img/Ícone_de_usuário_branco_brilhante-removebg-preview.png" alt="">
+
+                <input
+                    type="text"
+                    id="CPF"
+                    name="CPF"
+                    placeholder="Digite seu CPF"
+                    maxlength="14"
+                    inputmode="numeric"
+                    autocomplete="off"
+                >
+            </div>
+
+            <p id="errocpf"></p>
+
+            <div class="e-mail">
+                <img src="img/Ícone de Envelope Branco Minimalista.png" alt="">
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Digite seu e-mail"
+                    autocomplete="off"
+                >
+            </div>
+
+            <p id="erroEmail"></p>
+
+            <div class="senha">
+                <img src="img/Ícone de Cadeado Branco Minimalista.png" alt="">
+
+                <input
+                    type="password"
+                    id="senha"
+                    name="senha"
+                    placeholder="Digite sua senha"
+                >
+
+                <button
+                    type="button"
+                    id="mostrar"
+                    class="mostrarsenha"
+                    aria-label="Mostrar ou ocultar senha"
+                ></button>
+            </div>
+
+            <p id="errosenha"></p>
+
+            <div class="c-senha">
+                <img src="img/Ícone de Cadeado Branco Minimalista.png" alt="">
+
+                <input
+                    type="password"
+                    id="confirmar-senha"
+                    name="confirmar-senha"
+                    placeholder="Digite sua senha novamente"
+                >
+
+                <button
+                    type="button"
+                    id="mostrar2"
+                    class="mostrarsenha-2"
+                    aria-label="Mostrar ou ocultar confirmação da senha"
+                ></button>
+            </div>
+
+            <p id="senhaigual"></p>
+
+            <div>
+                <button type="submit" id="cadastro">
+                    Cadastrar
+                </button>
+            </div>
+
+        </form>
+
+        <p>
+            Já possui uma conta?
+            <a href="login.html">Entrar</a>
+        </p>
+
+    </div>
+
+    <script>
+        // Elementos do HTML
+        const formulario = document.getElementById("formulario-cadastro");
+
+        const CPFbonitinho = document.getElementById("CPF");
+
+        const mostrar = document.getElementById("mostrar");
+        const mostrar2 = document.getElementById("mostrar2");
+
+        const senhaOculta = document.getElementById("senha");
+        const confirmarOculta = document.getElementById("confirmar-senha");
+
+        const URL = "https://projeto-restaurante-backend-5mhl.onrender.com/cliente";
+
+
+        // Formatação automática do CPF
+        CPFbonitinho.addEventListener("input", function () {
+            let numeros = CPFbonitinho.value.replace(/\D/g, "");
+
+            numeros = numeros.substring(0, 11);
+
+            if (numeros.length > 9) {
+                numeros = numeros.replace(
+                    /^(\d{3})(\d{3})(\d{3})(\d{1,2}).*/,
+                    "$1.$2.$3-$4"
+                );
+            } else if (numeros.length > 6) {
+                numeros = numeros.replace(
+                    /^(\d{3})(\d{3})(\d{1,3}).*/,
+                    "$1.$2.$3"
+                );
+            } else if (numeros.length > 3) {
+                numeros = numeros.replace(
+                    /^(\d{3})(\d{1,3}).*/,
+                    "$1.$2"
+                );
+            }
+
+            CPFbonitinho.value = numeros;
+        });
+
+
+        // Mostrar ou ocultar a primeira senha
+        let ocultar1 = false;
+
+        mostrar.addEventListener("click", function () {
+            if (ocultar1) {
+                senhaOculta.type = "password";
+
+                mostrar.style.backgroundImage =
+                    "url('img/Ícone de olho oculto minimalista.png')";
+
+                ocultar1 = false;
+            } else {
+                senhaOculta.type = "text";
+
+                mostrar.style.backgroundImage =
+                    "url('img/Ícone de Olho Branco Minimalista.png')";
+
+                ocultar1 = true;
+            }
+        });
+
+
+        // Mostrar ou ocultar a confirmação da senha
+        let ocultar2 = false;
+
+        mostrar2.addEventListener("click", function () {
+            if (ocultar2) {
+                confirmarOculta.type = "password";
+
+                mostrar2.style.backgroundImage =
+                    "url('img/Ícone de olho oculto minimalista.png')";
+
+                ocultar2 = false;
+            } else {
+                confirmarOculta.type = "text";
+
+                mostrar2.style.backgroundImage =
+                    "url('img/Ícone de Olho Branco Minimalista.png')";
+
+                ocultar2 = true;
+            }
+        });
+
+
+        // Validar CPF
+        function validarCPF(strCPF) {
+            strCPF = strCPF.replace(/\D/g, "");
+
+            if (
+                strCPF.length !== 11 ||
+                /^(\d)\1+$/.test(strCPF)
+            ) {
+                return false;
+            }
+
+            let soma = 0;
+            let resto;
+
+            for (let i = 1; i <= 9; i++) {
+                soma +=
+                    parseInt(strCPF.substring(i - 1, i)) *
+                    (11 - i);
+            }
+
+            resto = (soma * 10) % 11;
+
+            if (resto === 10 || resto === 11) {
+                resto = 0;
+            }
+
+            if (resto !== parseInt(strCPF.substring(9, 10))) {
+                return false;
+            }
+
+            soma = 0;
+
+            for (let i = 1; i <= 10; i++) {
+                soma +=
+                    parseInt(strCPF.substring(i - 1, i)) *
+                    (12 - i);
+            }
+
+            resto = (soma * 10) % 11;
+
+            if (resto === 10 || resto === 11) {
+                resto = 0;
+            }
+
+            if (resto !== parseInt(strCPF.substring(10, 11))) {
+                return false;
+            }
+
+            return true;
+        }
+
+
+        // Validar e-mail
+        function validarEmail(email) {
+            const regex =
+                /^[^\s@]+@(gmail\.com|hotmail\.com|yahoo\.com|outlook\.com|icloud\.com|proton\.me)$/i;
+
+            return regex.test(email);
+        }
+
+
+        // Cadastro
+        formulario.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            console.log("CLIQUEI EM CADASTRAR!");
+
+            // Pegar os valores digitados
+            const nome = document.getElementById("nome").value.trim();
+            const cpf = document.getElementById("CPF").value;
+            const email = document.getElementById("email").value.trim();
+            const senha = document.getElementById("senha").value;
+            const csenha = document.getElementById("confirmar-senha").value;
+
+            // Elementos para mensagens de erro
+            const erroSenha = document.getElementById("errosenha");
+            const erroNome = document.getElementById("erronome");
+            const senhaIgual = document.getElementById("senhaigual");
+            const erroCpf = document.getElementById("errocpf");
+            const erroEmail = document.getElementById("erroEmail");
+
+            // Limpar mensagens anteriores
+            erroNome.textContent = "";
+            erroCpf.textContent = "";
+            erroSenha.textContent = "";
+            senhaIgual.textContent = "";
+            erroEmail.textContent = "";
+
+            // Validar nome
+            if (nome.length < 3) {
+                erroNome.textContent =
+                    "Nome tem que ter no mínimo 3 caracteres.";
+            } else if (nome.length > 20) {
+                erroNome.textContent =
+                    "Nome tem que ter no máximo 20 caracteres.";
+            }
+
+            // Validar CPF
+            if (!validarCPF(cpf)) {
+                erroCpf.textContent =
+                    "Seu CPF não está correto ou é inválido.";
+            }
+
+            // Validar senha
+            if (senha.length < 8) {
+                erroSenha.textContent =
+                    "A senha tem que ter no mínimo 8 caracteres.";
+            }
+
+            // Confirmar senha
+            if (senha !== csenha) {
+                senhaIgual.textContent =
+                    "As senhas não coincidem.";
+            }
+
+            // Validar e-mail
+            if (!validarEmail(email)) {
+                erroEmail.textContent =
+                    "O e-mail tem que ser válido.";
+            }
+
+            // Colorir mensagens de erro
+            const erros = [
+                erroNome,
+                erroCpf,
+                erroSenha,
+                senhaIgual,
+                erroEmail
+            ];
+
+            erros.forEach(function (erro) {
+                erro.style.color = "white";
+            });
+
+            // Não enviar se houver erros
+            if (
+                erroNome.textContent !== "" ||
+                erroCpf.textContent !== "" ||
+                erroSenha.textContent !== "" ||
+                senhaIgual.textContent !== "" ||
+                erroEmail.textContent !== ""
+            ) {
+                console.log("Cadastro bloqueado: verifique os campos.");
+                return;
+            }
+
+            // Enviar os dados para o backend
+            try {
+                const resposta = await fetch(URL, {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        nome: nome,
+                        email: email,
+                        cpf: cpf.replace(/\D/g, ""),
+                        senha: senha
+                    })
+                });
+
+                // Ler a resposta mesmo se ela não for JSON
+                const textoResposta = await resposta.text();
+
+                let dados;
+
+                try {
+                    dados = textoResposta
+                        ? JSON.parse(textoResposta)
+                        : {};
+                } catch {
+                    dados = textoResposta;
+                }
+
+                console.log("Status HTTP:", resposta.status);
+                console.log("Resposta do servidor:", dados);
+
+                if (!resposta.ok) {
+                    console.error("O servidor recusou o cadastro.");
+
+                    alert(
+                        "Não foi possível realizar o cadastro. " +
+                        "Verifique a resposta do servidor no Console."
+                    );
+
+                    return;
+                }
+
+                console.log("Cadastro enviado com sucesso!");
+
+                alert("Cadastro realizado com sucesso!");
+
+            } catch (erro) {
+                console.error("Erro ao enviar cadastro:", erro);
+
+                alert(
+                    "Erro ao conectar com o servidor. " +
+                    "Verifique sua conexão e tente novamente."
+                );
+            }
+        });
+    </script>
+</body>
+</html>

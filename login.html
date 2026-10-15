@@ -1,0 +1,149 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login</title>
+
+    <link rel="stylesheet" href="style-login.css">
+    <link rel="shortcut icon"
+          href="img/Logo-Circular-Chapa-Quente.ico"
+          type="image/x-icon">
+
+    <!-- O Fetch continua em um arquivo separado -->
+    <script src="fetch_login.js" defer></script>
+</head>
+
+<body>
+    <div class="boxzinho">
+
+        <img src="img/Ícone de Usuário Neon em Vidro.png" alt="">
+
+        <h1>Login</h1>
+
+        <p class="topo">
+            Entre na sua conta para continuar
+        </p>
+
+        <!-- E-mail -->
+        <div class="email">
+            <img src="img/Ícone de Envelope Branco Minimalista.png" alt="">
+
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Digite seu e-mail"
+                autocomplete="email"
+            >
+        </div>
+
+        <p id="erroEmail"></p>
+
+        <!-- CPF -->
+        <div class="CPF">
+            <img
+                src="img/Ícone_de_usuário_branco_brilhante-removebg-preview.png"
+                alt=""
+            >
+
+            <input
+                type="text"
+                name="cpf"
+                id="cpf"
+                placeholder="Digite seu CPF"
+                maxlength="14"
+                inputmode="numeric"
+                autocomplete="off"
+            >
+        </div>
+
+        <p id="errocpf"></p>
+
+        <!-- Senha -->
+        <div class="senha">
+            <img
+                src="img/Ícone de Cadeado Branco Minimalista.png"
+                alt=""
+            >
+
+            <input
+                type="password"
+                id="senha"
+                name="senha"
+                placeholder="Digite sua senha"
+                autocomplete="current-password"
+            >
+
+            <button
+                type="button"
+                id="mostrar"
+                class="mostrarsenha"
+                aria-label="Mostrar ou ocultar senha"
+            ></button>
+        </div>
+
+        <p id="erroSenha"></p>
+
+        <!-- Botão de login -->
+        <button type="button" id="login">
+            Entrar
+        </button>
+
+        <p>
+            Ainda não possui uma conta?
+            <a href="index.html">Cadastre-se</a>
+        </p>
+
+    </div>
+
+    <script>
+        // Máscara do CPF
+        const CPFbonitinho = document.getElementById("cpf");
+
+        CPFbonitinho.addEventListener("input", function () {
+            let numeros = CPFbonitinho.value.replace(/\D/g, "");
+            numeros = numeros.substring(0, 11);
+
+            if (numeros.length > 9) {
+                numeros = numeros.replace(
+                    /^(\d{3})(\d{3})(\d{3})(\d{1,2}).*/,
+                    "$1.$2.$3-$4"
+                );
+            } else if (numeros.length > 6) {
+                numeros = numeros.replace(
+                    /^(\d{3})(\d{3})(\d{1,3}).*/,
+                    "$1.$2.$3"
+                );
+            } else if (numeros.length > 3) {
+                numeros = numeros.replace(
+                    /^(\d{3})(\d{1,3}).*/,
+                    "$1.$2"
+                );
+            }
+
+            CPFbonitinho.value = numeros;
+        });
+
+        // Mostrar ou ocultar senha
+        const mostrar = document.getElementById("mostrar");
+        const senhaOculta = document.getElementById("senha");
+
+        let senhaVisivel = false;
+
+        mostrar.addEventListener("click", function () {
+            senhaVisivel = !senhaVisivel;
+
+            senhaOculta.type = senhaVisivel ? "text" : "password";
+
+            mostrar.style.backgroundImage = senhaVisivel
+                ? "url('img/Ícone de Olho Branco Minimalista.png')"
+                : "url('img/Ícone de olho oculto minimalista.png')";
+        });
+    </script>
+
+</body>
+</html>
+```
